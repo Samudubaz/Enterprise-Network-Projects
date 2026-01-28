@@ -1,0 +1,18 @@
+=========================================================================================
+SW-05
+=========================================================================================
+Switch(config)#hostname SW-05
+
+Shutdown unwanted port
+==========================
+SW-05(config)#interface range fa 0/3-24
+SW-05(config-if-range)#shutdown
+SW-05(config-if-range)#exit
+
+Sticky MAC Filtering
+=====================
+SW-05(config)#interface range fa 0/1-2
+SW-05(config-if-range)#switchport mode access
+SW-05(config-if-range)#switchport port-security
+SW-05(config-if-range)#switchport port-security mac-address sticky
+SW-05(config-if-range)#end

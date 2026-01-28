@@ -1,0 +1,86 @@
+Switch Configurations
+===============================================================================
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+Switch(config)#hostname F1-Switch
+
+F1-Switch(config)#int range fa0/2-3
+F1-Switch(config-if-range)#switchport mode access 
+F1-Switch(config-if-range)#switchport access vlan 80
+F1-Switch(config-if-range)#ex
+
+F1-Switch(config)#int range fa0/4-5
+F1-Switch(config-if-range)#switchport mode access 
+F1-Switch(config-if-range)#switchport access vlan 70
+F1-Switch(config-if-range)#ex
+
+F1-Switch(config)#int range fa0/6-8
+F1-Switch(config-if-range)#switchport mode access 
+F1-Switch(config-if-range)#switchport access vlan 60
+F1-Switch(config-if-range)#ex
+
+Trunk the Interface
+--------------------------------------------------
+F1-Switch(config)#int fa0/1
+F1-Switch(config-if)#switchport mode trunk 
+F1-Switch(config-if)#ex
+
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+Switch(config)#hostname F2-Switch
+
+F2-Switch(config)#int range fa0/2-3
+F2-Switch(config-if-range)#switchport mode access 
+F2-Switch(config-if-range)#switchport access vlan 30
+F2-Switch(config-if-range)#ex
+
+F2-Switch(config)#int range fa0/4-5
+F2-Switch(config-if-range)#switchport mode access 
+F2-Switch(config-if-range)#switchport access vlan 40
+F2-Switch(config-if-range)#ex
+
+F2-Switch(config)#int range fa0/6-8
+F2-Switch(config-if-range)#switchport mode access 
+F2-Switch(config-if-range)#switchport access vlan 50
+F2-Switch(config-if-range)#ex
+
+Trunk the Interface
+--------------------------------------------------
+F2-Switch(config)#int fa0/1
+F2-Switch(config-if)#switchport mode trunk 
+F2-Switch(config-if)#ex
+
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+Switch(config)#hostname F3-Switch
+
+F3-Switch(config)#int range fa0/2-3
+F3-Switch(config-if-range)#switchport mode access 
+F3-Switch(config-if-range)#switchport access vlan 10
+F3-Switch(config-if-range)#ex
+
+F3-Switch(config)#int range fa0/4-6
+F3-Switch(config-if-range)#switchport mode access 
+F3-Switch(config-if-range)#switchport access vlan 20
+F3-Switch(config-if-range)#ex
+
+Trunk the Interface
+--------------------------------------------------
+F3-Switch(config)#int fa0/1
+F3-Switch(config-if)#switchport mode trunk 
+F3-Switch(config-if)#ex
+
+Sticky Port Security For Test PC
+--------------------------------------------------
+F3-Switch(config)#int fa0/2
+F3-Switch(config-if)#switchport port-security 
+F3-Switch(config-if)#switchport port-security maximum 1
+F3-Switch(config-if)#switchport port-security mac-address sticky 
+F3-Switch(config-if)#switchport port-security violation shutdown 
+F3-Switch(config-if)#ex
+F3-Switch(config)#do wr

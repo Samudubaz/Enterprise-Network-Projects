@@ -1,0 +1,33 @@
+=========================================================================================
+ISP-Router
+=========================================================================================
+Router(config)#hostname ISP
+
+Up the Interfaces
+=============================
+ISP(config)#interface Serial0/1/0
+ISP(config-if)#description CBR
+ISP(config-if)#clock rate 64000
+ISP(config-if)#ip add 100.100.10.1 255.255.255.252
+ISP(config-if)#no shutdown
+ISP(config-if)#exit
+
+ISP(config)#interface Serial0/1/1
+ISP(config-if)#description KBR
+ISP(config-if)#clock rate 64000
+ISP(config-if)#ip add 100.100.10.5 255.255.255.252
+ISP(config-if)#no shutdown
+ISP(config-if)#exit
+
+ISP(config)#interface Serial0/2/0
+ISP(config-if)#description GBR
+ISP(config-if)#clock rate 64000
+ISP(config-if)#ip add 100.100.10.9 255.255.255.252
+ISP(config-if)#no shutdown
+ISP(config-if)#exit
+
+Routing
+=============================
+ISP(config)#ip route 0.0.0.0 0.0.0.0 100.100.10.2
+ISP(config)#ip route 0.0.0.0 0.0.0.0 100.100.10.6
+ISP(config)#ip route 0.0.0.0 0.0.0.0 100.100.10.10

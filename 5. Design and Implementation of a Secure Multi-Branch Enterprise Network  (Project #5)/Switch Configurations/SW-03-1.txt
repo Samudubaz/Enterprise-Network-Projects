@@ -1,0 +1,38 @@
+=========================================================================================
+SW-03-1
+=========================================================================================
+Switch(config)#hostname SW-03-1
+
+EtherChannel (PAGP)
+======================
+SW-03-1(config)#interface range fastEthernet 0/10-12
+SW-03-1(config-if-range)#channel-group 1 mode desirable 
+SW-03-1(config-if-range)#speed auto 
+SW-03-1(config-if-range)#duplex auto
+SW-03-1(config-if-range)#mdix auto 
+SW-03-1(config-if-range)#exit
+
+SW-03-1(config)#interface range fastEthernet 0/20-22
+SW-03-1(config-if-range)#channel-group 2 mode desirable 
+SW-03-1(config-if-range)#speed auto 
+SW-03-1(config-if-range)#duplex auto
+SW-03-1(config-if-range)#mdix auto 
+SW-03-1(config-if-range)#exit
+
+STP
+=========
+SW-03-1(config)#spanning-tree vlan 1 root secondary 
+
+Shutdown unwanted port
+==========================
+SW-03-1(config)#interface range fa 0/2-9, fa 0/13-19, fa 0/23-24
+SW-03-1(config-if-range)#shutdown
+SW-03-1(config-if-range)#exit
+
+Sticky MAC Filtering
+=====================
+SW-03-1(config)#interface fastEthernet 0/1
+SW-03-1(config-if)#switchport mode access
+SW-03-1(config-if)#switchport port-security
+SW-03-1(config-if)#switchport port-security mac-address sticky
+SW-03-1(config-if)#end

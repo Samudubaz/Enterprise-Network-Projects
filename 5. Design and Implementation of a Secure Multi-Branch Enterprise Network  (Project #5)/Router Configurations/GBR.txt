@@ -1,0 +1,137 @@
+=========================================================================================
+GBR-Router
+=========================================================================================
+
+Basic Configurations
+======================
+Router(config)#hostname GBR
+
+GBR(config)#banner motd *
+####################################################### 
+This is Secure area. Please enter your Authentication.  
+####################################################### *
+
+
+GBR(config)#enable secret samudU@2024.lk
+
+GBR(config)#line console 0
+GBR(config-line)#password Samudu@2024.lk
+GBR(config-line)#login
+GBR(config-line)#exit
+
+GBR(config)#username Admin secret Samudu@SsH.lk
+GBR(config)#ip domain-name yasiru.lk
+GBR(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+GBR(config)#line vty 0
+GBR(config-line)#exec-timeout 15
+GBR(config-line)#login local
+GBR(config-line)#transport input ssh
+GBR(config-line)#exit
+
+GBR(config)#service password-encryption
+
+GBR(config)#security passwords min-length 10
+
+GBR(config)#login block-for 300 attempts 3 within 60
+
+GBR(config)#exit
+
+Up the Interfaces
+=============================
+GBR(config)#interface GigabitEthernet0/0/0
+GBR(config-if)#description SW-08
+GBR(config-if)#ip add 172.16.2.126 255.255.255.128
+GBR(config-if)#ip helper-address 172.16.0.3
+GBR(config-if)#no shutdown
+GBR(config-if)#exit
+
+GBR(config)#interface GigabitEthernet0/0/1
+GBR(config-if)#description SW-09
+GBR(config-if)#ip add 172.16.0.254 255.255.255.0
+GBR(config-if)#no shutdown
+GBR(config-if)#exit
+
+GBR(config)#interface Serial0/2/0
+GBR(config-if)#description ISP
+GBR(config-if)#ip add 100.100.10.10 255.255.255.252
+GBR(config-if)#ip helper-address 172.16.0.3
+GBR(config-if)#no shutdown
+GBR(config-if)#exit
+
+Routing
+=============================
+GBR(config)#ip route 0.0.0.0 0.0.0.0 100.100.10.9
+
+GBR(config)#router rip
+GBR(config-router)#version 2
+GBR(config-router)#passive-interface gigabitEthernet 0/0/0
+GBR(config-router)#passive-interface gigabitEthernet 0/0/1
+GBR(config-router)#network 172.16.2.0
+GBR(config-router)#network 172.16.0.0
+GBR(config-router)#network 172.20.1.0
+GBR(config-router)#no auto-summary
+GBR(config-router)#default-information originate
+GBR(config-router)#exit
+
+SYSLOG
+=============================
+GBR(config)#logging host 172.16.0.2
+GBR(config)#logging on
+GBR(config)#logging buffered
+GBR(config)#logging console
+GBR(config)#logging trap
+GBR(config)#logging userinfo
+
+NTP
+=============================
+GBR(config)#ntp server 172.16.0.2
+GBR(config)#exit
+
+TFTP
+=============================
+GBR#copy startup-config tftp
+Address or name of remote host []? 172.16.0.2
+Destination filename [GBR-confg]? GBR Config
+
+ACL
+=============================
+-----------------------------------------------------------------------------------------------------------------------
+Branch’s network users cannot ping server network. But they can access all services.
+-----------------------------------------------------------------------------------------------------------------------
+GBR(config)#access-list 102 deny icmp 172.16.2.0 0.0.0.127 172.16.0.0 0.0.0.255
+GBR(config)#access-list 102 permit ip any any
+
+GBR(config)#interface gigabitEthernet 0/0/0
+GBR(config-if)#ip access-group 102 in
+GBR(config-if)#exit
+
+GBR(config)#access-list 103 deny icmp 172.16.0.0 0.0.0.255 172.16.0.0 0.0.0.255
+GBR(config)#access-list 103 permit ip any any
+
+GBR(config)#interface gigabitEthernet 0/0/1
+GBR(config-if)#ip access-group 103 in
+GBR(config-if)#exit
+
+VPN TUNNEL
+=============================
+-----------------------------------------------------------------------------------------------------------------------
+CBR TO GBR
+-----------------------------------------------------------------------------------------------------------------------
+GBR(config)#interface tunnel 1
+GBR(config-if)#ip address 172.20.1.6 255.255.255.252
+GBR(config-if)#tunnel source serial 0/2/0
+GBR(config-if)#tunnel destination 100.100.10.2
+GBR(config-if)#no shut
+GBR(config-if)#exit
+
+-----------------------------------------------------------------------------------------------------------------------
+KBR TO GBR
+-----------------------------------------------------------------------------------------------------------------------
+GBR(config)#interface tunnel 2
+GBR(config-if)#ip address 172.20.1.10 255.255.255.252
+GBR(config-if)#tunnel source serial 0/2/0
+GBR(config-if)#tunnel destination 100.100.10.6
+GBR(config-if)#no shut
+GBR(config-if)#exit

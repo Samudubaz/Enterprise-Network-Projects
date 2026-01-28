@@ -1,0 +1,137 @@
+=========================================================================================
+KBR-Router
+=========================================================================================
+
+Basic Configurations
+======================
+Router(config)#hostname KBR
+
+KBR(config)#banner motd *
+####################################################### 
+This is Secure area. Please enter your Authentication.  
+####################################################### *
+
+KBR(config)#enable secret samudU@2024.lk
+
+KBR(config)#line console 0
+KBR(config-line)#password Samudu@2024.lk
+KBR(config-line)#login
+KBR(config-line)#exit
+
+KBR(config)#username Admin secret Samudu@SsH.lk
+KBR(config)#ip domain-name yasiru.lk
+KBR(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+KBR(config)#line vty 0
+KBR(config-line)#exec-timeout 15
+KBR(config-line)#login local
+KBR(config-line)#transport input ssh
+KBR(config-line)#exit
+
+KBR(config)#service password-encryption
+
+KBR(config)#security passwords min-length 10
+
+KBR(config)#login block-for 300 attempts 3 within 60
+
+KBR(config)#exit
+
+Up the Interfaces
+=============================
+KBR(config)#interface GigabitEthernet0/0/0
+KBR(config-if)#descr
+KBR(config-if)#description SW-06
+KBR(config-if)#ip add 172.16.3.190 255.255.255.192
+KBR(config-if)#ip helper-address 172.16.0.3
+KBR(config-if)#no shutdown
+KBR(config-if)#exit
+
+KBR(config)#interface GigabitEthernet0/0/1
+KBR(config-if)#description SW-07
+KBR(config-if)#ip add 172.16.2.254 255.255.255.128
+KBR(config-if)#ip helper-address 172.16.0.3
+KBR(config-if)#no shutdown
+KBR(config-if)#exit
+
+KBR(config)#interface Serial0/1/1
+KBR(config-if)#description ISP
+KBR(config-if)#ip add 100.100.10.6 255.255.255.252
+KBR(config-if)#no shutdown
+KBR(config-if)#exit
+
+Routing
+=============================
+KBR(config)#ip route 0.0.0.0 0.0.0.0 100.100.10.5
+
+KBR(config)#router rip
+KBR(config-router)#version 2
+KBR(config-router)#passive-interface gigabitEthernet 0/0/0
+KBR(config-router)#passive-interface gigabitEthernet 0/0/1
+KBR(config-router)#network 172.16.3.128
+KBR(config-router)#network 172.16.2.128
+KBR(config-router)#network 172.20.1.0
+KBR(config-router)#no auto-summary
+KBR(config-router)#default-information originate
+KBR(config-router)#exit
+
+SYSLOG
+=============================
+KBR(config)#logging host 172.16.0.2
+KBR(config)#logging on
+KBR(config)#logging buffered
+KBR(config)#logging console
+KBR(config)#logging trap
+KBR(config)#logging userinfo
+
+NTP
+=============================
+KBR(config)#ntp server 172.16.0.2
+KBR(config)#exit
+
+
+TFTP
+=============================
+KBR#copy startup-config tftp
+Address or name of remote host []? 172.16.0.2
+Destination filename [KBR-confg]? KBR Config
+
+ACL
+=============================
+-----------------------------------------------------------------------------------------------------------------------
+Branch’s network users cannot ping server network. But they can access all services.
+-----------------------------------------------------------------------------------------------------------------------
+KBR(config)#access-list 102 deny icmp 172.16.3.128 0.0.0.63 172.16.0.0 0.0.0.255
+KBR(config)#access-list 102 permit ip any any
+
+KBR(config)#interface gigabitEthernet 0/0/0
+KBR(config-if)#ip access-group 102 in
+KBR(config-if)#exit
+
+KBR(config)#access-list 103 deny icmp 172.16.2.128 0.0.0.127 172.16.0.0 0.0.0.255
+KBR(config)#access-list 103 permit ip any any
+
+KBR(config)#interface gigabitEthernet 0/0/1
+KBR(config-if)#ip access-group 103 in
+KBR(config-if)#exit
+
+VPN TUNNEL
+=============================
+-----------------------------------------------------------------------------------------------------------------------
+CBR TO KBR
+-----------------------------------------------------------------------------------------------------------------------
+KBR(config)#interface tunnel 0
+KBR(config-if)#ip address 172.20.1.2 255.255.255.252
+KBR(config-if)#tunnel source serial 0/1/1
+KBR(config-if)#tunnel destination 100.100.10.2
+KBR(config-if)#no shut
+KBR(config-if)#exit
+-----------------------------------------------------------------------------------------------------------------------
+KBR TO GBR
+-----------------------------------------------------------------------------------------------------------------------
+KBR(config)#interface tunnel 2
+KBR(config-if)#ip address 172.20.1.9 255.255.255.252
+KBR(config-if)#tunnel source serial 0/1/1
+KBR(config-if)#tunnel destination 100.100.10.10
+KBR(config-if)#no shut
+KBR(config-if)#exit

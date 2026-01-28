@@ -1,0 +1,17 @@
+=========================================================================================
+SW-01
+=========================================================================================
+Switch(config)#hostname SW-01
+
+Shutdown unwanted port
+==========================
+SW-01(config)#interface range fa 0/3-24
+SW-01(config-if-range)#shutdown
+SW-01(config-if-range)#exit
+
+Sticky MAC Filtering
+=====================
+SW-01(config)#interface range fastEthernet 0/1-2
+SW-01(config-if-range)#switchport mode access
+SW-01(config-if-range)#switchport port-security
+SW-01(config-if-range)#switchport port-security mac-address sticky

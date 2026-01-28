@@ -1,0 +1,16 @@
+Router Configurations
+===============================================================================
+
+Up the Interfaces
+----------------------------------------------
+Router(config)#interface gigabitEthernet 0/0
+Router(config-if)#description ACCOUNTS_DEP
+Router(config-if)#ip add 192.168.40.1 255.255.255.128
+Router(config-if)#no shut
+Router(config-if)#exit
+
+Router(config)#interface gigabitEthernet 0/1
+Router(config-if)#description DELIVERY_DEP
+Router(config-if)#ip add 192.168.40.129 255.255.255.128
+Router(config-if)#no shut
+Router(config-if)#exit

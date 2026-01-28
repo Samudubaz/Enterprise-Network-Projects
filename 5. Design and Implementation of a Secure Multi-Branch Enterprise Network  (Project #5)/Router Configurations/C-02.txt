@@ -1,0 +1,103 @@
+=========================================================================================
+C-02-Router
+=========================================================================================
+
+Basic Configurations
+======================
+Router(config)#hostname C-02
+
+C-02(config)#banner motd *
+####################################################### 
+This is Secure area. Please enter your Authentication.  
+####################################################### *
+
+C-02(config)#enable secret samudU@2024.lk
+
+C-02(config)#line console 0
+C-02(config-line)#password Samudu@2024.lk
+C-02(config-line)#login
+C-02(config-line)#exit
+
+C-02(config)#username Admin secret Samudu@SsH.lk
+C-02(config)#ip domain-name yasiru.lk
+C-02(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+C-02(config)#line vty 0
+C-02(config-line)#exec-timeout 15
+C-02(config-line)#login local
+C-02(config-line)#transport input ssh
+C-02(config-line)#exit
+
+C-02(config)#service password-encryption
+
+C-02(config)#security passwords min-length 10
+
+C-02(config)#login block-for 300 attempts 3 within 60
+
+C-02(config)#exit
+
+Up the Interfaces
+=============================
+C-02(config)#interface GigabitEthernet0/0/0
+C-02(config-if)#description SW-03
+C-02(config-if)#ip add 172.16.1.254 255.255.255.0
+C-02(config-if)#ip helper-address 172.16.0.3
+C-02(config-if)#no shutdown
+C-02(config-if)#exit
+
+C-02(config)#interface Serial0/1/0
+C-02(config-if)#description C-01
+C-02(config-if)#ip add 172.16.4.66 255.255.255.252
+C-02(config-if)#no shutdown
+C-02(config-if)#exit
+
+C-02(config)#interface Serial0/1/1
+C-02(config-if)#description CBR
+C-02(config-if)#ip add 172.16.4.70 255.255.255.252
+C-02(config-if)#clock rate 64000
+C-02(config-if)#no shutdown
+C-02(config-if)#exit
+
+Routing
+=============================
+C-02(config)#router rip
+C-02(config-router)#version 2
+C-02(config-router)#passive-interface gigabitEthernet 0/0/0
+C-02(config-router)#network 172.16.1.0
+C-02(config-router)#network 172.16.4.64
+C-02(config-router)#network 172.16.4.68
+C-02(config-router)#no auto-summary 
+C-02(config-router)#exit
+
+SYSLOG
+=============================
+C-02(config)#logging host 172.16.0.2
+C-02(config)#logging on
+C-02(config)#logging buffered
+C-02(config)#logging console
+C-02(config)#logging trap
+C-02(config)#logging userinfo
+
+NTP
+=============================
+C-02(config)#ntp server 172.16.0.2
+C-02(config)#exit
+
+TFTP
+=============================
+C-02#copy startup-config tftp
+Address or name of remote host []? 172.16.0.2
+Destination filename [C-02-confg]? C-02 Config
+
+ACL
+=============================
+-----------------------------------------------------------------------------------------------------------------------
+Branch’s network users cannot ping server network. But they can access all services.
+-----------------------------------------------------------------------------------------------------------------------
+C-02(config)#access-list 102 deny icmp 172.16.1.0 0.0.0.255 172.16.0.0 0.0.0.255
+C-02(config)#access-list 102 permit ip any any
+
+C-02(config)#interface gigabitEthernet 0/0/0
+C-02(config-if)#ip access-group 102 in
+C-02(config-if)#exit

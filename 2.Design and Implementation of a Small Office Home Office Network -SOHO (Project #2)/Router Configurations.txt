@@ -1,0 +1,52 @@
+Router Configurations
+===============================================================================
+
+Up the Port
+--------------------------------------------------
+Router(config)#interface gigabitEthernet 0/0
+Router(config-if)#no shut
+Router(config-if)#ex
+Router(config)#do wr
+
+Create Sub-interfaces and Inter-VLAN
+--------------------------------------------------
+Router(config)#int gig0/0.10
+Router(config-subif)#encapsulation dot1Q 10
+Router(config-subif)#ip add 192.168.1.1 255.255.255.192
+Router(config-subif)#ex
+
+Router(config)#int gig0/0.20
+Router(config-subif)#encapsulation dot1Q 20
+Router(config-subif)#ip add 192.168.1.65 255.255.255.192
+Router(config-subif)#ex
+
+Router(config)#int gig0/0.30
+Router(config-subif)#encapsulation dot1Q 30
+Router(config-subif)#ip add 192.168.1.129 255.255.255.192
+Router(config-subif)#ex
+
+
+DHCP Configurations
+--------------------------------------------------
+Router(config)#service dhcp 
+
+Router(config)#ip dhcp pool Admin-Pool
+Router(dhcp-config)#network 192.168.1.0 255.255.255.192
+Router(dhcp-config)#default-router 192.168.1.1
+Router(dhcp-config)#dns-server 192.168.1.1
+Router(dhcp-config)#domain-name Admin.com
+Router(dhcp-config)#ex
+
+Router(config)#ip dhcp pool Finance-Pool
+Router(dhcp-config)#network 192.168.1.64 255.255.255.192
+Router(dhcp-config)#default-router 192.168.1.65
+Router(dhcp-config)#dns-server 192.168.1.65
+Router(dhcp-config)#domain-name Finance.com
+Router(dhcp-config)#ex
+
+Router(config)#ip dhcp pool CS-Pool
+Router(dhcp-config)#network 192.168.1.128 255.255.255.192
+Router(dhcp-config)#default-router 192.168.1.129
+Router(dhcp-config)#dns-server 192.168.1.129
+Router(dhcp-config)#domain-name CS.com
+Router(dhcp-config)#ex

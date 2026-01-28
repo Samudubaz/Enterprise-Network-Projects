@@ -1,0 +1,77 @@
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+MCS(config)#interface GigabitEthernet1/0/2
+MCS(config-if)#switchport mode access 
+MCS(config-if)#switchport access vlan 10
+MCS(config-if)#ex
+
+MCS(config)#interface GigabitEthernet1/0/3
+MCS(config-if)#switchport mode access 
+MCS(config-if)#switchport access vlan 20
+MCS(config-if)#ex
+
+MCS(config)#interface GigabitEthernet1/0/4
+MCS(config-if)#switchport mode access 
+MCS(config-if)#switchport access vlan 30
+MCS(config-if)#ex
+
+MCS(config)#interface GigabitEthernet1/0/5
+MCS(config-if)#switchport mode access 
+MCS(config-if)#switchport access vlan 40
+MCS(config-if)#ex
+
+MCS(config)#interface GigabitEthernet1/0/6
+MCS(config-if)#switchport mode access 
+MCS(config-if)#switchport access vlan 50
+MCS(config-if)#ex
+
+MCS(config)#interface GigabitEthernet1/0/7
+MCS(config-if)#switchport mode access 
+MCS(config-if)#switchport access vlan 60
+MCS(config-if)#ex
+
+MCS(config)#interface GigabitEthernet1/0/8
+MCS(config-if)#switchport mode access 
+MCS(config-if)#switchport access vlan 70
+MCS(config-if)#ex
+
+MCS(config)#interface GigabitEthernet1/0/9
+MCS(config-if)#switchport mode access 
+MCS(config-if)#switchport access vlan 80
+MCS(config-if)#ex
+
+Trunk the Interface
+--------------------------------------------------
+MCS(config)#interface GigabitEthernet1/0/1
+MCS(config-if)#switchport mode trunk
+MCS(config-if)#switchport trunk encapsulation dot1Q
+MCS(config-if)#ex
+
+
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+BCS(config)#interface GigabitEthernet1/0/2
+BCS(config-if)#switchport mode access 
+BCS(config-if)#switchport access vlan 90
+BCS(config-if)#ex
+
+BCS(config)#interface GigabitEthernet1/0/3
+BCS(config-if)#switchport mode access 
+BCS(config-if)#switchport access vlan 100
+BCS(config-if)#ex
+
+Trunk the Interface
+--------------------------------------------------
+BCS(config)#int gig1/0/1
+BCS(config-if)#switchport mode trunk 
+BCS(config-if)#switchport trunk encapsulation dot1Q
+BCS(config-if)#ex
+
+
+
+
+
+
+

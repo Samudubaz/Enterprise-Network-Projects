@@ -1,0 +1,123 @@
+=========================================================================================
+C-01-Router
+=========================================================================================
+
+Basic Configurations
+======================
+Router(config)#hostname C-01
+
+C-01(config)#banner motd *
+####################################################### 
+This is Secure area. Please enter your Authentication.  
+####################################################### *
+
+
+C-01(config)#enable secret samudU@2024.lk
+
+C-01(config)#line console 0
+C-01(config-line)#password Samudu@2024.lk
+C-01(config-line)#login
+C-01(config-line)#exit
+
+C-01(config)#username Admin secret Samudu@SsH.lk
+C-01(config)#ip domain-name yasiru.lk
+C-01(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+C-01(config)#line vty 0
+C-01(config-line)#exec-timeout 15
+C-01(config-line)#login local
+C-01(config-line)#transport input ssh
+C-01(config-line)#exit
+
+C-01(config)#service password-encryption
+
+C-01(config)#security passwords min-length 10
+
+C-01(config)#login block-for 300 attempts 3 within 60
+
+C-01(config)#exit
+
+Up the Interfaces
+=============================
+C-01(config)#interface GigabitEthernet0/0/0
+C-01(config-if)#description SW-01
+C-01(config-if)#ip add 172.16.3.126 255.255.255.128
+C-01(config-if)#ip helper-address 172.16.0.3
+C-01(config-if)#no shutdown
+C-01(config-if)#exit
+
+
+C-01(config)#interface GigabitEthernet0/0/1
+C-01(config-if)#description SW-02
+C-01(config-if)#ip add 172.16.3.222 255.255.255.224
+C-01(config-if)#ip helper-address 172.16.0.3
+C-01(config-if)#no shutdown
+C-01(config-if)#exit
+
+C-01(config)#interface Serial0/1/0
+C-01(config-if)#description C-02
+C-01(config-if)#ip add 172.16.4.65 255.255.255.252
+C-01(config-if)#no shutdown
+C-01(config-if)#exit
+
+Routing
+=============================
+C-01(config)#router rip
+C-01(config-router)#version 2
+C-01(config-router)#passive-interface gigabitEthernet 0/0/0
+C-01(config-router)#passive-interface gigabitEthernet 0/0/1
+C-01(config-router)#network 172.16.3.0
+C-01(config-router)#network 172.16.3.192
+C-01(config-router)#network 172.16.4.64
+C-01(config-router)#no auto-summary 
+C-01(config-router)#exit
+
+SYSLOG
+=============================
+C-01(config)#logging host 172.16.0.2
+C-01(config)#logging on
+C-01(config)#logging buffered
+C-01(config)#logging console
+C-01(config)#logging trap
+C-01(config)#logging userinfo
+
+NTP
+=============================
+C-01(config)#ntp server 172.16.0.2
+C-01(config)#exit
+
+TFTP
+=============================
+C-01#copy startup-config tftp
+Address or name of remote host []? 172.16.0.2
+Destination filename [C-01-confg]? C-01 Config
+
+ACL
+=============================
+-----------------------------------------------------------------------------------------------------------------------
+SW-01 network cannot access SW-03 and SW-03-1 network. 
+-----------------------------------------------------------------------------------------------------------------------
+C-01(config)#access-list 101 deny ip 172.16.3.0 0.0.0.127 172.16.1.0 0.0.0.255
+C-01(config)#access-list 101 permit ip any any
+
+C-01(config)#interface gigabitEthernet 0/0/0
+C-01(config-if)#ip access-group 101 in
+C-01(config-if)#exit
+
+-----------------------------------------------------------------------------------------------------------------------
+Branch’s network users cannot ping server network. But they can access all services.
+-----------------------------------------------------------------------------------------------------------------------
+C-01(config)#access-list 102 deny icmp 172.16.3.0 0.0.0.127 172.16.0.0 0.0.0.255
+C-01(config)#access-list 102 permit ip any any
+
+C-01(config)#interface gigabitEthernet 0/0/0
+C-01(config-if)#ip access-group 102 in
+C-01(config-if)#exit
+
+C-01(config)#access-list 103 deny icmp 172.16.3.192 0.0.0.31 172.16.0.0 0.0.0.255
+C-01(config)#access-list 103 permit ip any any
+
+C-01(config)#interface gigabitEthernet 0/0/1
+C-01(config-if)#ip access-group 103 in
+C-01(config-if)#exit

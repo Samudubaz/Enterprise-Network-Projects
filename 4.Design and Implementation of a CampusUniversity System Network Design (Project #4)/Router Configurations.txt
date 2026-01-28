@@ -1,0 +1,236 @@
+Router Configurations
+===============================================================================
+
+Up the Interfaces
+-----------------------------------------------
+Router(config)#hostname MCR
+
+MCR(config)#interface Serial0/1/0
+MCR(config-if)#ip add 10.10.10.5 255.255.255.252
+MCR(config-if)#no shut
+MCR(config-if)#clock rate 64000
+MCR(config-if)#exit
+
+MCR(config)#interface Serial0/1/1
+MCR(config-if)#ip add 10.10.10.1 255.255.255.252
+MCR(config-if)#no shut
+MCR(config-if)#clock rate 64000
+MCR(config-if)#exit
+
+MCR(config)#interface GigabitEthernet0/0
+MCR(config-if)#no shutdown
+MCR(config-if)#exit
+
+
+Create Sub-interfaces and Inter-VLAN
+--------------------------------------------------
+MCR(config)#int gig0/0.10
+MCR(config-subif)#encapsulation dot1Q 10
+MCR(config-subif)#ip add 192.168.1.1 255.255.255.0
+MCR(config-subif)#ex
+
+MCR(config)#int gig0/0.20
+MCR(config-subif)#encapsulation dot1Q 20
+MCR(config-subif)#ip add 192.168.2.1 255.255.255.0
+MCR(config-subif)#ex
+
+MCR(config)#int gig0/0.30
+MCR(config-subif)#encapsulation dot1Q 30
+MCR(config-subif)#ip add 192.168.3.1 255.255.255.0
+MCR(config-subif)#ex
+
+MCR(config)#int gig0/0.40
+MCR(config-subif)#encapsulation dot1Q 40
+MCR(config-subif)#ip add 192.168.4.1 255.255.255.0
+MCR(config-subif)#ex
+
+MCR(config)#int gig0/0.50
+MCR(config-subif)#encapsulation dot1Q 50
+MCR(config-subif)#ip add 192.168.5.1 255.255.255.0
+MCR(config-subif)#ex
+
+MCR(config)#int gig0/0.60
+MCR(config-subif)#encapsulation dot1Q 60
+MCR(config-subif)#ip add 192.168.6.1 255.255.255.0
+MCR(config-subif)#ex
+
+MCR(config)#int gig0/0.70
+MCR(config-subif)#encapsulation dot1Q 70
+MCR(config-subif)#ip add 192.168.7.1 255.255.255.0
+MCR(config-subif)#ex
+
+MCR(config)#int gig0/0.80
+MCR(config-subif)#encapsulation dot1Q 80
+MCR(config-subif)#ip add 192.168.8.1 255.255.255.0
+MCR(config-subif)#ex
+
+DHCP Configurations
+--------------------------------------------------
+MCR(config)#service dhcp
+
+MCR(config)#ip dhcp pool ADMIN
+MCR(dhcp-config)#network 192.168.1.0 255.255.255.0
+MCR(dhcp-config)#default-router 192.168.1.1
+MCR(dhcp-config)#dns-server 192.168.1.1
+MCR(dhcp-config)#ex
+
+MCR(config)#ip dhcp pool HR
+MCR(dhcp-config)#network 192.168.2.0 255.255.255.0
+MCR(dhcp-config)#default-router 192.168.2.1
+MCR(dhcp-config)#dns-server 192.168.2.1
+MCR(dhcp-config)#ex
+
+MCR(config)#ip dhcp pool FINANCE
+MCR(dhcp-config)#network 192.168.3.0 255.255.255.0
+MCR(dhcp-config)#default-router 192.168.3.1
+MCR(dhcp-config)#dns-server 192.168.3.1
+MCR(dhcp-config)#ex
+
+MCR(config)#ip dhcp pool BUISNESS
+MCR(dhcp-config)#network 192.168.4.0 255.255.255.0
+MCR(dhcp-config)#default-router 192.168.4.1
+MCR(dhcp-config)#dns-server 192.168.4.1
+MCR(dhcp-config)#ex
+
+MCR(config)#ip dhcp pool E&C
+MCR(dhcp-config)#network 192.168.5.0 255.255.255.0
+MCR(dhcp-config)#default-router 192.168.5.1
+MCR(dhcp-config)#dns-server 192.168.5.1
+MCR(dhcp-config)#ex
+
+MCR(config)#ip dhcp pool A&D
+MCR(dhcp-config)#network 192.168.6.0 255.255.255.0
+MCR(dhcp-config)#default-router 192.168.6.1
+MCR(dhcp-config)#dns-server 192.168.6.1
+MCR(dhcp-config)#ex
+
+MCR(config)#ip dhcp pool STUD_LAB
+MCR(dhcp-config)#network 192.168.7.0 255.255.255.0
+MCR(dhcp-config)#default-router 192.168.7.1
+MCR(dhcp-config)#dns-server 192.168.7.1
+MCR(dhcp-config)#ex
+
+MCR(config)#ip dhcp pool IT_LAB
+MCR(dhcp-config)#network 192.168.8.0 255.255.255.0
+MCR(dhcp-config)#default-router 192.168.8.1
+MCR(dhcp-config)#dns-server 192.168.8.1
+MCR(dhcp-config)#ex
+
+RIP Routing
+--------------------------------------------------
+MCR(config)#router rip
+MCR(config-router)#version 2
+MCR(config-router)#network 192.168.1.0
+MCR(config-router)#network 192.168.2.0
+MCR(config-router)#network 192.168.3.0
+MCR(config-router)#network 192.168.4.0
+MCR(config-router)#network 192.168.5.0
+MCR(config-router)#network 192.168.6.0
+MCR(config-router)#network 192.168.7.0
+MCR(config-router)#network 192.168.8.0
+MCR(config-router)#network 10.10.10.0
+MCR(config-router)#network 10.10.10.4
+MCR(config-router)#no auto-summary 
+MCR(config-router)#ex
+
+SSH
+--------------------------------------------------
+MCR(config)#ip domain-name SLTC.lk
+MCR(config)#username sltc password sltc@123
+MCR(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+MCR(config)#line vty 0 15
+MCR(config-line)#login local
+MCR(config-line)#transport input ssh
+MCR(config-line)#do wr
+--------------------------------------------------------------------------------
+
+
+Up the Interfaces
+-----------------------------------------------
+Router(config)#hostname BCR
+
+BCR(config)#interface Serial0/2/0
+BCR(config-if)#ip add 10.10.10.2 255.255.255.252
+BCR(config-if)#no shut
+BCR(config-if)#ex
+
+BCR(config)#interface GigabitEthernet0/0
+BCR(config-if)#no shut
+BCR(config-if)#ex
+
+Create Sub-interfaces and Inter-VLAN
+--------------------------------------------------
+BCR(config)#int gig0/0.90
+BCR(config-subif)#encapsulation dot1Q 90
+BCR(config-subif)#ip add 192.168.9.1 255.255.255.0
+BCR(config-subif)#ex
+
+BCR(config)#int gig0/0.100
+BCR(config-subif)#encapsulation dot1Q 100
+BCR(config-subif)#ip add 192.168.10.1 255.255.255.0
+BCR(config-subif)#ex
+
+DHCP Configurations
+--------------------------------------------------
+BCR(config)#service dhcp
+
+BCR(config)#ip dhcp pool STAFF
+BCR(dhcp-config)#network 192.168.9.0 255.255.255.0
+BCR(dhcp-config)#default-router 192.168.9.1
+BCR(dhcp-config)#dns-server 192.168.9.1
+BCR(dhcp-config)#ex
+
+BCR(config)#ip dhcp pool STUD_LAB
+BCR(dhcp-config)#network 192.168.10.0 255.255.255.0
+BCR(dhcp-config)#default-router 192.168.10.1
+BCR(dhcp-config)#dns-server 192.168.10.1
+BCR(dhcp-config)#ex
+
+RIP Routing
+--------------------------------------------------
+BCR(config)#router rip
+BCR(config-router)#version 2
+BCR(config-router)#network 192.168.9.0
+BCR(config-router)#network 192.168.10.0
+BCR(config-router)#network 10.10.10.0
+BCR(config-router)#no auto-summary 
+BCR(config-router)#ex
+
+SSH
+--------------------------------------------------
+BCR(config)#ip domain-name SLTC.lk
+BCR(config)#username sltc password sltc@123
+BCR(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+BCR(config)#line vty 0 15
+BCR(config-line)#login local
+BCR(config-line)#transport input ssh
+BCR(config-line)#do wr
+--------------------------------------------------------------------------------
+
+Up the Interfaces
+-----------------------------------------------
+Router(config)#hostname CLOUD
+
+CLOUD(config)#interface Serial0/1/0
+CLOUD(config-if)#ip add 10.10.10.6 255.255.255.252
+CLOUD(config-if)#ip add 20.0.0.1 255.255.255.252
+CLOUD(config-if)#no shut
+CLOUD(config-if)#ex
+
+CLOUD(config)#interface GigabitEthernet0/0
+CLOUD(config-if)#ip add 20.0.0.1 255.255.255.252
+CLOUD(config-if)#no shut
+CLOUD(config-if)#ex
+
+RIP Routing
+--------------------------------------------------
+CLOUD(config)#router rip
+CLOUD(config-router)#version 2
+CLOUD(config-router)#network 10.10.10.4
+CLOUD(config-router)#network 20.0.0.0
+CLOUD(config-router)#no auto-summary 
+CLOUD(config-router)#ex

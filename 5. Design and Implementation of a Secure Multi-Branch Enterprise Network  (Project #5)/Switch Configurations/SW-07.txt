@@ -1,0 +1,18 @@
+=========================================================================================
+SW-07
+=========================================================================================
+Switch(config)#hostname SW-07
+
+Shutdown unwanted port
+==========================
+SW-07(config)#interface range fa 0/3-24
+SW-07(config-if-range)#shutdown
+SW-07(config-if-range)#exit
+
+Sticky MAC Filtering
+=====================
+SW-07(config)#interface range fa 0/1-2
+SW-07(config-if-range)#switchport mode access
+SW-07(config-if-range)#switchport port-security
+SW-07(config-if-range)#switchport port-security mac-address sticky
+SW-07(config-if-range)#end

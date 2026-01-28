@@ -1,0 +1,194 @@
+=========================================================================================
+CBR-Router
+=========================================================================================
+
+Basic Configurations
+======================
+Router(config)#hostname CBR
+
+CBR(config)#banner motd *
+####################################################### 
+This is Secure area. Please enter your Authentication.  
+####################################################### *
+
+CBR(config)#enable secret samudU@2024.lk
+
+CBR(config)#line console 0
+CBR(config-line)#password Samudu@2024.lk
+CBR(config-line)#login
+CBR(config-line)#exit
+
+CBR(config)#username Admin secret Samudu@SsH.lk
+CBR(config)#ip domain-name yasiru.lk
+CBR(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+CBR(config)#line vty 0
+CBR(config-line)#exec-timeout 15
+CBR(config-line)#login local
+CBR(config-line)#transport input ssh
+CBR(config-line)#exit
+
+CBR(config)#service password-encryption
+
+CBR(config)#security passwords min-length 10
+
+CBR(config)#login block-for 300 attempts 3 within 60
+
+CBR(config)#exit
+
+Up the Interfaces
+=============================
+CBR(config)#interface GigabitEthernet0/0/0
+CBR(config-if)#description SW-04
+CBR(config-if)#no shutdown
+CBR(config-if)#exit
+
+CBR(config)#interface GigabitEthernet0/0/0.2
+CBR(config-subif)#description VLAN-02
+CBR(config-subif)#encapsulation dot1Q 2
+CBR(config-subif)#ip add 172.16.4.30 255.255.255.224
+CBR(config-subif)#ip helper-address 172.16.0.3
+CBR(config-subif)#no shutdown
+CBR(config-subif)#exit
+
+CBR(config)#interface GigabitEthernet0/0/0.3
+CBR(config-subif)#description VLAN-03
+CBR(config-subif)#encapsulation dot1Q 3
+CBR(config-subif)#ip add 172.16.3.254 255.255.255.224
+CBR(config-subif)#ip helper-address 172.16.0.3
+CBR(config-subif)#no shutdown
+CBR(config-subif)#exit
+
+CBR(config)#interface GigabitEthernet0/0/0.4
+CBR(config-subif)#description VLAN-04
+CBR(config-subif)#encapsulation dot1Q 4
+CBR(config-subif)#ip add 172.16.4.46 255.255.255.240
+CBR(config-subif)#ip helper-address 172.16.0.3
+CBR(config-subif)#no shutdown
+CBR(config-subif)#exit
+
+CBR(config)#interface GigabitEthernet0/0/1
+CBR(config-if)#description SW-05
+CBR(config-if)#ip add 172.16.4.62 255.255.255.240
+CBR(config-subif)#ip helper-address 172.16.0.3
+CBR(config-if)#no shutdown
+CBR(config-if)#exit
+
+CBR(config)#interface Serial0/1/1
+CBR(config-if)#description C-02
+CBR(config-if)#ip add 172.16.4.69 255.255.255.252
+CBR(config-if)#no shutdown
+CBR(config-if)#exit
+
+CBR(config)#interface Serial0/1/0
+CBR(config-if)#description ISP
+CBR(config-if)#ip add 100.100.10.2 255.255.255.252
+CBR(config-if)#no shutdown
+CBR(config-if)#exit
+
+Routing
+=============================
+CBR(config)#ip route 0.0.0.0 0.0.0.0 100.100.10.1
+
+CBR(config)#router rip
+CBR(config-router)#version 2
+CBR(config-router)#passive-interface gigabitEthernet 0/0/0
+CBR(config-router)#passive-interface gigabitEthernet 0/0/0.2
+CBR(config-router)#passive-interface gigabitEthernet 0/0/0.3
+CBR(config-router)#passive-interface gigabitEthernet 0/0/0.4
+CBR(config-router)#passive-interface gigabitEthernet 0/0/1
+CBR(config-router)#network 172.16.3.224
+CBR(config-router)#network 172.16.4.0
+CBR(config-router)#network 172.16.4.32
+CBR(config-router)#network 172.16.4.68
+CBR(config-router)#network 172.16.4.48
+CBR(config-router)#network 172.20.1.0
+CBR(config-router)#no auto-summary
+CBR(config-router)#default-information originate
+CBR(config-router)#exit
+
+SYSLOG
+=============================
+CBR(config)#logging host 172.16.0.2
+CBR(config)#logging on
+CBR(config)#logging buffered
+CBR(config)#logging console
+CBR(config)#logging trap
+CBR(config)#logging userinfo
+
+NTP
+=============================
+CBR(config)#ntp server 172.16.0.2
+CBR(config)#exit
+
+TFTP
+=============================
+CBR#copy startup-config tftp
+Address or name of remote host []? 172.16.0.2
+Destination filename [CBR-confg]? CBR Config
+
+ACL
+=============================
+-----------------------------------------------------------------------------------------------------------------------
+Probodha Silva cannot access web service. 
+-----------------------------------------------------------------------------------------------------------------------
+CBR(config)#access-list 100 deny tcp host 172.16.3.98 any eq 80
+CBR(config)#access-list 100 deny tcp host 172.16.3.98 any eq 443
+CBR(config)#access-list 100 permit ip any any
+
+CBR(config)#interface gigabitEthernet 0/0/0.2
+CBR(config-subif)#ip access-group 100 in
+CBR(config-subif)#exit
+
+-----------------------------------------------------------------------------------------------------------------------
+Branch’s network users cannot ping server network. But they can access all services.
+-----------------------------------------------------------------------------------------------------------------------
+CBR(config)#access-list 102 deny icmp 172.16.4.0 0.0.0.31 172.16.0.0 0.0.0.255
+CBR(config)#access-list 102 permit ip any any
+
+CBR(config)#interface gigabitEthernet 0/0/0.2
+CBR(config-subif)#ip access-group 102 in
+CBR(config-subif)#exit
+
+CBR(config)#access-list 103 deny icmp 172.16.3.224 0.0.0.31 172.16.0.0 0.0.0.255
+CBR(config)#access-list 103 permit ip any any
+
+CBR(config)#interface gigabitEthernet 0/0/0.3
+CBR(config-subif)#ip access-group 103 in
+CBR(config-subif)#exit
+
+CBR(config)#access-list 104 deny icmp 172.16.4.32 0.0.0.15 172.16.0.0 0.0.0.255
+CBR(config)#access-list 104 permit ip any any
+
+CBR(config)#interface gigabitEthernet 0/0/0.4
+CBR(config-subif)#ip access-group 104 in
+CBR(config-subif)#exit
+
+CBR(config)#access-list 105 deny icmp 172.16.4.48 0.0.0.15 172.16.0.0 0.0.0.255
+CBR(config)#access-list 105 permit ip any any
+
+CBR(config)#interface gigabitEthernet 0/0/1
+CBR(config-if)#ip access-group 105 in
+CBR(config-if)#exit
+
+VPN TUNNEL
+=============================
+-----------------------------------------------------------------------------------------------------------------------
+CBR TO KBR
+-----------------------------------------------------------------------------------------------------------------------
+CBR(config)#interface tunnel 0
+CBR(config-if)#ip address 172.20.1.1 255.255.255.252
+CBR(config-if)#tunnel source serial 0/1/0
+CBR(config-if)#tunnel destination 100.100.10.6
+CBR(config-if)#no shut
+CBR(config-if)#exit
+-----------------------------------------------------------------------------------------------------------------------
+CBR TO GBR
+-----------------------------------------------------------------------------------------------------------------------
+CBR(config)#interface tunnel 1
+CBR(config-if)#ip address 172.20.1.5 255.255.255.252
+CBR(config-if)#tunnel source serial 0/1/0
+CBR(config-if)#tunnel destination 100.100.10.10
+CBR(config-if)#no shut
+CBR(config-if)#exit

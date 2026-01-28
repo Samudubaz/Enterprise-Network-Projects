@@ -1,0 +1,55 @@
+=========================================================================================
+SW-04
+=========================================================================================
+Switch(config)#hostname SW-04
+
+VLANS
+===========
+SW-04(config)#vlan 2
+SW-04(config-vlan)#name LAB-01
+SW-04(config-vlan)#exit
+
+SW-04(config)#vlan 3
+SW-04(config-vlan)#name LAB-02
+SW-04(config-vlan)#exit
+
+SW-04(config)#vlan 4
+SW-04(config-vlan)#name LAB-03
+SW-04(config-vlan)#exit
+
+Assign Ports
+=======================
+SW-04(config)#interface range fastEthernet 0/1-5
+SW-04(config-if-range)#switchport mode access 
+SW-04(config-if-range)#switchport access vlan 2
+SW-04(config-if-range)#exit
+
+SW-04(config)#interface range fastEthernet 0/6-10
+SW-04(config-if-range)#switchport mode access 
+SW-04(config-if-range)#switchport access vlan 3
+SW-04(config-if-range)#exit
+
+SW-04(config)#interface range fastEthernet 0/11-15
+SW-04(config-if-range)#switchport mode access 
+SW-04(config-if-range)#switchport access vlan 4
+SW-04(config-if-range)#exit
+
+Trunk Mode
+===============
+SW-04(config)#interface GigabitEthernet0/1
+SW-04(config-if)#switchport mode trunk 
+SW-04(config-if)#exit
+
+Shutdown unwanted port
+==========================
+SW-04(config)#interface range fa 0/16-24
+SW-04(config-if-range)#shutdown
+SW-04(config-if-range)#exit
+
+Sticky MAC Filtering
+=====================
+SW-04(config)#interface range fa 0/1-15
+SW-04(config-if-range)#switchport mode access
+SW-04(config-if-range)#switchport port-security
+SW-04(config-if-range)#switchport port-security mac-address sticky
+SW-04(config-if-range)#end

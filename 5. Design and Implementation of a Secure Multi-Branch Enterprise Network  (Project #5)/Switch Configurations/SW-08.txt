@@ -1,0 +1,19 @@
+=========================================================================================
+SW-08
+=========================================================================================
+Switch(config)#hostname SW-08
+
+
+Shutdown unwanted port
+==========================
+SW-08(config)#interface range fa 0/3-24
+SW-08(config-if-range)#shutdown
+SW-08(config-if-range)#exit
+
+Sticky MAC Filtering
+=====================
+SW-08(config)#interface range fa 0/1-2
+SW-08(config-if-range)#switchport mode access
+SW-08(config-if-range)#switchport port-security
+SW-08(config-if-range)#switchport port-security mac-address sticky
+SW-08(config-if-range)#end

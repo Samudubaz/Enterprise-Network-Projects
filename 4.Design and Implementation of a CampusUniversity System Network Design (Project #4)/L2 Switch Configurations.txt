@@ -1,0 +1,159 @@
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+
+Admin(config)#int range fa0/1-24
+Admin(config-if-range)#switchport mode access
+Admin(config-if-range)#switchport access vlan 10
+Admin(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+Admin(config)#int range fa0/2-24
+Admin(config-if-range)#switchport port-security 
+Admin(config-if-range)#switchport port-security mac-address sticky 
+Admin(config-if-range)#switchport port-security violation shutdown 
+Admin(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+HR(config)#int range fa0/1-24
+HR(config-if-range)#switchport mode access
+HR(config-if-range)#switchport access vlan 20
+HR(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+HR(config)#int range fa0/2-24
+HR(config-if-range)#switchport port-security 
+HR(config-if-range)#switchport port-security mac-address sticky 
+HR(config-if-range)#switchport port-security violation shutdown 
+HR(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+Finance(config)#int range fa0/1-24
+Finance(config-if-range)#switchport mode access
+Finance(config-if-range)#switchport access vlan 30
+Finance(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+Finance(config)#int range fa0/2-24
+Finance(config-if-range)#switchport port-security 
+Finance(config-if-range)#switchport port-security mac-address sticky 
+Finance(config-if-range)#switchport port-security violation shutdown 
+Finance(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+Buisness(config)#int range fa0/1-24
+Buisness(config-if-range)#switchport mode access
+Buisness(config-if-range)#switchport access vlan 40
+Buisness(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+Buisness(config)#int range fa0/2-24
+Buisness(config-if-range)#switchport port-security 
+Buisness(config-if-range)#switchport port-security mac-address sticky 
+Buisness(config-if-range)#switchport port-security violation shutdown 
+Buisness(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+E&C(config)#int range fa0/1-24
+E&C(config-if-range)#switchport mode access
+E&C(config-if-range)#switchport access vlan 50
+E&C(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+E&C(config)#int range fa0/2-24
+E&C(config-if-range)#switchport port-security 
+E&C(config-if-range)#switchport port-security mac-address sticky 
+E&C(config-if-range)#switchport port-security violation shutdown 
+E&C(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+A&D(config)#int range fa0/1-24
+A&D(config-if-range)#switchport mode access
+A&D(config-if-range)#switchport access vlan 60
+A&D(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+A&D(config)#int range fa0/2-24
+A&D(config-if-range)#switchport port-security 
+A&D(config-if-range)#switchport port-security mac-address sticky 
+A&D(config-if-range)#switchport port-security violation shutdown 
+A&D(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+STUD_Lab(config)#int range fa0/1-24
+STUD_Lab(config-if-range)#switchport mode access
+STUD_Lab(config-if-range)#switchport access vlan 70
+STUD_Lab(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+STUD_Lab(config)#int range fa0/2-24
+STUD_Lab(config-if-range)#switchport port-security 
+STUD_Lab(config-if-range)#switchport port-security mac-address sticky 
+STUD_Lab(config-if-range)#switchport port-security violation shutdown 
+STUD_Lab(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+IT_Lab(config)#int range fa0/1-24
+IT_Lab(config-if-range)#switchport mode access
+IT_Lab(config-if-range)#switchport access vlan 80
+IT_Lab(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+IT_Lab(config)#int range fa0/2-24
+IT_Lab(config-if-range)#switchport port-security 
+IT_Lab(config-if-range)#switchport port-security mac-address sticky 
+IT_Lab(config-if-range)#switchport port-security violation shutdown 
+IT_Lab(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+STAFF(config)#int range fa0/1-24
+STAFF(config-if-range)#switchport mode access
+STAFF(config-if-range)#switchport access vlan 90
+STAFF(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+STAFF(config)#int range fa0/2-24
+STAFF(config-if-range)#switchport port-security 
+STAFF(config-if-range)#switchport port-security mac-address sticky 
+STAFF(config-if-range)#switchport port-security violation shutdown 
+STAFF(config-if-range)#ex
+--------------------------------------------------------------------------------
+
+Creating and Assigning Ports to VLANS
+-----------------------------------------------
+STUD_lab(config)#int range fa0/1-24
+STUD_lab(config-if-range)#switchport mode access
+STUD_lab(config-if-range)#switchport access vlan 100
+STUD_lab(config-if-range)#ex
+
+Sticky Port Security 
+--------------------------------------------------
+STUD_lab(config)#int range fa0/2-24
+STUD_lab(config-if-range)#switchport port-security 
+STUD_lab(config-if-range)#switchport port-security mac-address sticky 
+STUD_lab(config-if-range)#switchport port-security violation shutdown 
+STUD_lab(config-if-range)#ex
