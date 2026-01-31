@@ -1,0 +1,139 @@
+Basic Settings
+--------------------------------------------------------------
+Router(config)#hostname HR-Router
+
+HR-Router(config)#enable password cisco
+
+HR-Router(config)#line console 0
+HR-Router(config-line)#password cisco
+HR-Router(config-line)#login
+HR-Router(config-line)#exit
+
+HR-Router(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+HR-Router(config)#service password-encryption 
+
+HR-Router(config)#no ip domain-lookup 
+
+SSH
+--------------------------------------------------------------
+HR-Router(config)#ip domain-name SLTC.lk
+HR-Router(config)#username sltc password sltc@123
+HR-Router(config)#crypto key generate rsa
+The name for the keys will be: HR-Router.SLTC.lk
+How many bits in the modulus [512]: 1024
+
+HR-Router(config)#line vty 0 15
+HR-Router(config-line)#login local
+HR-Router(config-line)#transport input ssh
+
+Up The Interfaces
+-------------------------------------------------------------
+HR-Router(config)#interface Serial0/3/1
+HR-Router(config-if)#ip add 10.10.10.6 255.255.255.252
+HR-Router(config-if)#no shut
+HR-Router(config-if)#ex
+
+HR-Router(config)#interface Serial0/3/0
+HR-Router(config-if)#ip add 10.10.10.9 255.255.255.252
+HR-Router(config-if)#no shut
+HR-Router(config-if)#ex
+
+DHCP for Voice
+--------------------------------------------------------------
+HR-Router(config)#ip dhcp excluded-address 172.16.100.33
+
+HR-Router(config)#ip dhcp pool HRVOICE
+HR-Router(dhcp-config)#network 172.16.100.32 255.255.255.224
+HR-Router(dhcp-config)#default-router 172.16.100.33
+HR-Router(dhcp-config)#option 150 ip 172.16.100.33
+HR-Router(dhcp-config)#ex
+
+Inter-VLAN Routing
+--------------------------------------------------------------
+HR-Router(config)#int fa0/0.20
+HR-Router(config-subif)#encapsulation dot1Q 20
+HR-Router(config-subif)#ip address 192.168.100.33 255.255.255.224
+HR-Router(config-subif)#ip helper-address 192.168.100.130
+HR-Router(config-subif)#ex
+
+HR-Router(config)#int fa0/0.100
+HR-Router(config-subif)#encapsulation dot1Q 100
+HR-Router(config-subif)#ip address 172.16.100.33 255.255.255.224
+HR-Router(config-subif)#ex
+
+OSPF Routing
+--------------------------------------------------------------
+HR-Router(config)#router ospf 10
+HR-Router(config-router)#router-id 2.2.2.2
+HR-Router(config-router)#network 10.10.10.0 0.0.0.3 area 0
+HR-Router(config-router)#network 10.10.10.8 0.0.0.3 area 0
+HR-Router(config-router)#network 192.168.100.32 0.0.0.31 area 0
+HR-Router(config-router)#network 172.16.100.32 0.0.0.31 area 0
+HR-Router(config-router)#ex
+
+VoIP Configuration
+--------------------------------------------------------------
+HR-Router(config)#telephony-service
+HR-Router(config-telephony)#max-dn 20
+HR-Router(config-telephony)#max-ephones 20
+HR-Router(config-telephony)#ip source-address 172.16.100.33 port 2000
+HR-Router(config-telephony)#auto assign 1 to 20
+HR-Router(config-telephony)#exit
+
+HR-Router(config)#ephone-dn 1
+HR-Router(config-ephone-dn)#number 201
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 2
+HR-Router(config-ephone-dn)#number 202
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 3
+HR-Router(config-ephone-dn)#number 203
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 4
+HR-Router(config-ephone-dn)#number 204
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 5
+HR-Router(config-ephone-dn)#number 205
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 6
+HR-Router(config-ephone-dn)#number 206
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 7
+HR-Router(config-ephone-dn)#number 207
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 8
+HR-Router(config-ephone-dn)#number 208
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 9
+HR-Router(config-ephone-dn)#number 209
+HR-Router(config-ephone-dn)#exit
+
+HR-Router(config)#ephone-dn 10
+HR-Router(config-ephone-dn)#number 210
+HR-Router(config-ephone-dn)#exit
+
+Dial peering configuration
+--------------------------------------------------------------
+HR-Router(config)#dial-peer voice 1 voip 
+HR-Router(config-dial-peer)#destination-pattern 1..
+HR-Router(config-dial-peer)#session target ipv4:10.10.10.1
+HR-Router(config-dial-peer)#ex
+
+HR-Router(config)#dial-peer voice 4 voip 
+HR-Router(config-dial-peer)#destination-pattern 3..
+HR-Router(config-dial-peer)#session target ipv4:10.10.10.10
+HR-Router(config-dial-peer)#ex
+
+HR-Router(config)#dial-peer voice 6 voip 
+HR-Router(config-dial-peer)#destination-pattern 4..
+HR-Router(config-dial-peer)#session target ipv4:10.10.10.14
+HR-Router(config-dial-peer)#ex

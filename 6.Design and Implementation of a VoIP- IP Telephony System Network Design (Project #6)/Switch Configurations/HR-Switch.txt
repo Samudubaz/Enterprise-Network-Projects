@@ -1,0 +1,40 @@
+Basic Settings
+--------------------------------------------------------------
+Switch(config)#hostname HR-Sw
+
+HR-Sw(config)#enable password cisco
+
+HR-Sw(config)#line console 0
+HR-Sw(config-line)#password cisco
+HR-Sw(config-line)#login
+HR-Sw(config-line)#exit
+
+HR-Sw(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+HR-Sw(config)#service password-encryption 
+
+HR-Sw(config)#no ip domain-lookup 
+
+Switch(config)#hostname SALES-Sw
+SALES-Sw(config)#enable password cisco
+
+VLAN Creation, Assign Ports, Trunking 
+--------------------------------------------------------------
+HR-Sw(config)#int fa0/1
+HR-Sw(config-if)#switchport mode trunk 
+HR-Sw(config-if)#ex
+
+HR-Sw(config)#vlan 20
+HR-Sw(config-vlan)#name DATA
+HR-Sw(config-vlan)#ex
+
+HR-Sw(config)#vlan 100
+HR-Sw(config-vlan)#name VOICE
+HR-Sw(config-vlan)#ex
+
+HR-Sw(config)#int range fa0/2-24
+HR-Sw(config-if-range)#switchport mode access 
+HR-Sw(config-if-range)#switchport access vlan 20
+HR-Sw(config-if-range)#switchport voice vlan 100
+HR-Sw(config-if-range)#ex
+

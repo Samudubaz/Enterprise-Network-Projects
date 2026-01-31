@@ -1,0 +1,37 @@
+Basic Settings
+--------------------------------------------------------------
+Switch(config)#hostname ICT-Sw
+
+ICT-Sw(config)#enable password cisco
+
+ICT-Sw(config)#line console 0
+ICT-Sw(config-line)#password cisco
+ICT-Sw(config-line)#login
+ICT-Sw(config-line)#exit
+
+ICT-Sw(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+ICT-Sw(config)#service password-encryption 
+
+ICT-Sw(config)#no ip domain-lookup 
+
+VLAN Creation, Assign Ports, Trunking 
+--------------------------------------------------------------
+ICT-Sw(config)#int fa0/1
+ICT-Sw(config-if)#switchport mode trunk 
+ICT-Sw(config-if)#ex
+
+ICT-Sw(config)#vlan 40
+ICT-Sw(config-vlan)#name DATA
+ICT-Sw(config-vlan)#ex
+
+ICT-Sw(config)#vlan 100
+ICT-Sw(config-vlan)#name VOICE
+ICT-Sw(config-vlan)#ex
+
+ICT-Sw(config)#int range fa0/2-24
+ICT-Sw(config-if-range)#switchport mode access 
+ICT-Sw(config-if-range)#switchport access vlan 40
+ICT-Sw(config-if-range)#switchport voice vlan 100
+ICT-Sw(config-if-range)#ex
+

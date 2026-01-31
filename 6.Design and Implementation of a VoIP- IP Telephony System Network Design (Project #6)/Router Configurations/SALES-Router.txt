@@ -1,0 +1,138 @@
+Basic Settings
+--------------------------------------------------------------
+Router(config)#hostname SALES-Router
+
+SALES-Router(config)#enable password cisco
+
+SALES-Router(config)#line console 0
+SALES-Router(config-line)#password cisco
+SALES-Router(config-line)#login
+SALES-Router(config-line)#exit
+
+SALES-Router(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+SALES-Router(config)#service password-encryption 
+
+SALES-Router(config)#no ip domain-lookup 
+
+SSH
+--------------------------------------------------------------
+SALES-Router(config)#ip domain-name SLTC.lk
+SALES-Router(config)#username sltc password sltc@123
+SALES-Router(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+SALES-Router(config)#line vty 0 15
+SALES-Router(config-line)#login local
+SALES-Router(config-line)#transport input ssh
+
+Up The Interfaces
+-------------------------------------------------------------
+SALES-Router(config)#interface Serial0/3/0
+SALES-Router(config-if)#ip add 10.10.10.10 255.255.255.252
+SALES-Router(config-if)#no shut
+SALES-Router(config-if)#ex
+
+SALES-Router(config)#interface Serial0/3/1
+SALES-Router(config-if)#ip add 10.10.10.13 255.255.255.252
+SALES-Router(config-if)#no shut
+SALES-Router(config-if)#ex
+
+DHCP for Voice
+--------------------------------------------------------------
+SALES-Router(config)#ip dhcp excluded-address 172.16.100.65
+
+SALES-Router(config)#ip dhcp pool SALESVOICE
+SALES-Router(dhcp-config)#network 172.16.100.64 255.255.255.224
+SALES-Router(dhcp-config)#default-router 172.16.100.65
+SALES-Router(dhcp-config)#option 150 ip 172.16.100.65
+SALES-Router(dhcp-config)#ex
+
+Inter-VLAN Routing
+--------------------------------------------------------------
+SALES-Router(config)#int fa0/0.30
+SALES-Router(config-subif)#encapsulation dot1Q 30
+SALES-Router(config-subif)#ip address 192.168.100.65 255.255.255.224
+SALES-Router(config-subif)#ip helper-address 192.168.100.130
+SALES-Router(config-subif)#ex
+
+SALES-Router(config)#int fa0/0.100
+SALES-Router(config-subif)#encapsulation dot1Q 100
+SALES-Router(config-subif)#ip address 172.16.100.65 255.255.255.224
+SALES-Router(config-subif)#ex
+
+OSPF Routing
+--------------------------------------------------------------
+SALES-Router(config)#router ospf 10
+SALES-Router(config-router)#router-id 3.3.3.3
+SALES-Router(config-router)#network 10.10.10.8 0.0.0.3 area 0
+SALES-Router(config-router)#network 10.10.10.12 0.0.0.3 area 0
+SALES-Router(config-router)#network 192.168.100.64 0.0.0.31 area 0
+SALES-Router(config-router)#network 172.16.100.64 0.0.0.31 area 0
+SALES-Router(config-router)#ex
+
+VoIP Configuration
+--------------------------------------------------------------
+SALES-Router(config)#telephony-service
+SALES-Router(config-telephony)#max-dn 20
+SALES-Router(config-telephony)#max-ephones 20
+SALES-Router(config-telephony)#ip source-address 172.16.100.65 port 2000
+SALES-Router(config-telephony)#auto assign 1 to 20
+SALES-Router(config-telephony)#exit
+
+SALES-Router(config)#ephone-dn 1
+SALES-Router(config-ephone-dn)#number 301
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 2
+SALES-Router(config-ephone-dn)#number 302
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 3
+SALES-Router(config-ephone-dn)#number 303
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 4
+SALES-Router(config-ephone-dn)#number 304
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 5
+SALES-Router(config-ephone-dn)#number 305
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 6
+SALES-Router(config-ephone-dn)#number 306
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 7
+SALES-Router(config-ephone-dn)#number 307
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 8
+SALES-Router(config-ephone-dn)#number 308
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 9
+SALES-Router(config-ephone-dn)#number 309
+SALES-Router(config-ephone-dn)#exit
+
+SALES-Router(config)#ephone-dn 10
+SALES-Router(config-ephone-dn)#number 310
+SALES-Router(config-ephone-dn)#exit
+
+Dial peering configuration
+--------------------------------------------------------------
+SALES-Router(config)#dial-peer voice 3 voip 
+SALES-Router(config-dial-peer)#destination-pattern 1..
+SALES-Router(config-dial-peer)#session target ipv4:10.10.10.1
+SALES-Router(config-dial-peer)#ex
+
+SALES-Router(config)#dial-peer voice 4 voip 
+SALES-Router(config-dial-peer)#destination-pattern 2..
+SALES-Router(config-dial-peer)#session target ipv4:10.10.10.9
+SALES-Router(config-dial-peer)#ex
+
+SALES-Router(config)#dial-peer voice 5 voip 
+SALES-Router(config-dial-peer)#destination-pattern 4..
+SALES-Router(config-dial-peer)#session target ipv4:10.10.10.14
+SALES-Router(config-dial-peer)#ex

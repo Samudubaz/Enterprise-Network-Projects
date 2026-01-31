@@ -1,0 +1,141 @@
+Basic Settings
+--------------------------------------------------------------
+Router(config)#hostname FIN-Router
+
+FIN-Router(config)#enable password cisco
+
+FIN-Router(config)#line console 0
+FIN-Router(config-line)#password cisco
+FIN-Router(config-line)#login
+FIN-Router(config-line)#exit
+
+FIN-Router(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+FIN-Router(config)#service password-encryption 
+
+FIN-Router(config)#no ip domain-lookup 
+
+SSH
+--------------------------------------------------------------
+FIN-Router(config)#ip domain-name SLTC.lk
+FIN-Router(config)#username sltc password sltc@123
+FIN-Router(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+FIN-Router(config)#line vty 0 15
+FIN-Router(config-line)#login local
+FIN-Router(config-line)#transport input ssh
+
+Up The Interfaces
+--------------------------------------------------------------
+FIN-Router(config)#interface Serial0/3/0
+FIN-Router(config-if)#ip add 10.10.10.1 255.255.255.252
+FIN-Router(config-if)#no shut
+FIN-Router(config-if)#ex
+
+FIN-Router(config)#interface Serial0/3/1
+FIN-Router(config-if)#ip add 10.10.10.5 255.255.255.252
+FIN-Router(config-if)#no shut
+FIN-Router(config-if)#ex
+
+DHCP for Voice
+--------------------------------------------------------------
+FIN-Router(config)#ip dhcp excluded-address 172.16.100.1
+
+FIN-Router(config)#ip dhcp pool FINVOICE
+FIN-Router(dhcp-config)#network 172.16.100.0 255.255.255.224
+FIN-Router(dhcp-config)#default-router 172.16.100.1
+FIN-Router(dhcp-config)#option 150 ip 172.16.100.1
+FIN-Router(dhcp-config)#ex
+
+Inter-VLAN Routing
+--------------------------------------------------------------
+FIN-Router(config)#int fa0/0.10
+FIN-Router(config-subif)#encapsulation dot1Q 10
+FIN-Router(config-subif)#ip address 192.168.100.1 255.255.255.224
+FIN-Router(config-subif)#ip helper-address 192.168.100.130
+FIN-Router(config-subif)#ex
+
+FIN-Router(config)#int fa0/0.100
+FIN-Router(config-subif)#encapsulation dot1Q 100
+FIN-Router(config-subif)#ip address 172.16.100.1 255.255.255.224
+FIN-Router(config-subif)#ip helper-address 192.168.100.130
+FIN-Router(config-subif)#ex
+
+OSPF Routing
+--------------------------------------------------------------
+FIN-Router(config)#router ospf 10
+FIN-Router(config-router)#router-id 1.1.1.1
+FIN-Router(config-router)#network 10.10.10.4 0.0.0.3 area 0
+FIN-Router(config-router)#network 10.10.10.0 0.0.0.3 area 0
+FIN-Router(config-router)#network 192.168.100.0 0.0.0.31 area 0
+FIN-Router(config-router)#network 172.16.100.0 0.0.0.31 area 0
+FIN-Router(config-router)#ex
+
+VoIP Configuration
+--------------------------------------------------------------
+FIN-Router(config)#telephony-service 
+FIN-Router(config-telephony)#max-dn 20
+FIN-Router(config-telephony)#max-ephones 20
+FIN-Router(config-telephony)#ip source-address 172.16.100.1 port 2000
+FIN-Router(config-telephony)#auto assign 1 to 20
+FIN-Router(config-telephony)#ex
+
+FIN-Router(config)#ephone-dn 1
+FIN-Router(config-ephone-dn)#number 101
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 2
+FIN-Router(config-ephone-dn)#number 102
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 3
+FIN-Router(config-ephone-dn)#number 103
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 4
+FIN-Router(config-ephone-dn)#number 104
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 5
+FIN-Router(config-ephone-dn)#number 105
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 6
+FIN-Router(config-ephone-dn)#number 106
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 7
+FIN-Router(config-ephone-dn)#number 107
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 8
+FIN-Router(config-ephone-dn)#number 108
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 9
+FIN-Router(config-ephone-dn)#number 109
+FIN-Router(config-ephone-dn)#ex
+
+FIN-Router(config)#ephone-dn 10
+FIN-Router(config-ephone-dn)#number 110
+FIN-Router(config-ephone-dn)#ex
+
+Dial peering configuration
+--------------------------------------------------------------
+FIN-Router(config)#dial-peer voice 1 voip 
+FIN-Router(config-dial-peer)#destination-pattern 2..
+FIN-Router(config-dial-peer)#session target ipv4:10.10.10.2
+FIN-Router(config-dial-peer)#ex
+
+FIN-Router(config)#dial-peer voice 2 voip 
+FIN-Router(config-dial-peer)#destination-pattern 4..
+FIN-Router(config-dial-peer)#session target ipv4:10.10.10.6
+FIN-Router(config-dial-peer)#ex
+
+FIN-Router(config)#dial-peer voice 3 voip 
+FIN-Router(config-dial-peer)#destination-pattern 3..
+FIN-Router(config-dial-peer)#session target ipv4:10.10.10.10
+FIN-Router(config-dial-peer)#ex
+
+

@@ -1,0 +1,75 @@
+Basic Settings
+--------------------------------------------------------------
+Switch(config)#hostname FIN-Sw
+
+FIN-Sw(config)#enable password cisco
+
+FIN-Sw(config)#line console 0
+FIN-Sw(config-line)#password cisco
+FIN-Sw(config-line)#login
+FIN-Sw(config-line)#exit
+
+FIN-Sw(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+FIN-Sw(config)#service password-encryption 
+
+FIN-Sw(config)#no ip domain-lookup 
+
+VLAN Creation, Assign Ports, Trunking 
+--------------------------------------------------------------
+FIN-Sw(config)#int fa0/1
+FIN-Sw(config-if)#switchport mode trunk 
+FIN-Sw(config-if)#ex
+
+FIN-Sw(config)#vlan 10
+FIN-Sw(config-vlan)#name DATA
+FIN-Sw(config-vlan)#ex
+
+FIN-Sw(config)#vlan 100
+FIN-Sw(config-vlan)#name VOICE
+FIN-Sw(config-vlan)#ex
+
+FIN-Sw(config)#int range fa0/2-24
+FIN-Sw(config-if-range)#switchport mode access 
+FIN-Sw(config-if-range)#switchport access vlan 10
+FIN-Sw(config-if-range)#switchport voice vlan 100
+FIN-Sw(config-if-range)#ex
+
+
+-------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------
+Basic Settings
+--------------------------------------------------------------
+Switch(config)#hostname SVR-Sw
+
+SVR-Sw(config)#enable password cisco
+
+SVR-Sw(config)#line console 0
+SVR-Sw(config-line)#password cisco
+SVR-Sw(config-line)#login
+SVR-Sw(config-line)#exit
+
+SVR-Sw(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+SVR-Sw(config)#service password-encryption 
+
+SVR-Sw(config)#no ip domain-lookup 
+
+VLAN Creation, Assign Ports, Trunking 
+--------------------------------------------------------------
+SVR-Sw(config)#int fa0/1
+SVR-Sw(config-if)#switchport mode trunk 
+SVR-Sw(config-if)#ex
+
+SVR-Sw(config)#vlan 50
+SVR-Sw(config-vlan)#name DATA
+SVR-Sw(config-vlan)#ex
+
+SVR-Sw(config)#int range fa0/2-24
+SVR-Sw(config-if-range)#switchport mode access 
+SVR-Sw(config-if-range)#switchport access vlan 50
+SVR-Sw(config-if-range)#ex

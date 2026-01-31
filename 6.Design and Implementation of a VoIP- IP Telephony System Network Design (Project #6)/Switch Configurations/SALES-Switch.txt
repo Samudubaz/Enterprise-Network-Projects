@@ -1,0 +1,32 @@
+Basic Settings
+--------------------------------------------------------------
+SALES-Sw(config)#line console 0
+SALES-Sw(config-line)#password cisco
+SALES-Sw(config-line)#login
+SALES-Sw(config-line)#exit
+
+SALES-Sw(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+SALES-Sw(config)#service password-encryption 
+
+SALES-Sw(config)#no ip domain-lookup 
+
+VLAN Creation, Assign Ports, Trunking 
+--------------------------------------------------------------
+SALES-Sw(config)#int fa0/1
+SALES-Sw(config-if)#switchport mode trunk 
+SALES-Sw(config-if)#ex
+
+SALES-Sw(config)#vlan 30
+SALES-Sw(config-vlan)#name DATA
+SALES-Sw(config-vlan)#ex
+
+SALES-Sw(config)#vlan 100
+SALES-Sw(config-vlan)#name VOICE
+SALES-Sw(config-vlan)#ex
+
+SALES-Sw(config)#int range fa0/2-24
+SALES-Sw(config-if-range)#switchport mode access 
+SALES-Sw(config-if-range)#switchport access vlan 30
+SALES-Sw(config-if-range)#switchport voice vlan 100
+SALES-Sw(config-if-range)#ex

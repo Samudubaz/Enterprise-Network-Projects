@@ -1,0 +1,145 @@
+Basic Settings
+--------------------------------------------------------------
+Router(config)#hostname ICT-Router
+
+ICT-Router(config)#enable password cisco
+
+ICT-Router(config)#line console 0
+ICT-Router(config-line)#password cisco
+ICT-Router(config-line)#login
+ICT-Router(config-line)#exit
+
+ICT-Router(config)#banner motd &NO UNAUTHORIZED ACCESS&
+
+ICT-Router(config)#service password-encryption 
+
+ICT-Router(config)#no ip domain-lookup 
+
+SSH
+--------------------------------------------------------------
+ICT-Router(config)#
+ICT-Router(config)#ip domain-name SLTC.lk
+ICT-Router(config)#username sltc password sltc@123
+ICT-Router(config)#crypto key generate rsa
+How many bits in the modulus [512]: 1024
+
+ICT-Router(config)#line vty 0 15
+ICT-Router(config-line)#login local
+ICT-Router(config-line)#transport input ssh
+
+Up The Interfaces
+-------------------------------------------------------------
+ICT-Router(config)#interface Serial0/3/1
+ICT-Router(config-if)#ip add 10.10.10.14 255.255.255.252
+ICT-Router(config-if)#no shut
+ICT-Router(config-if)#ex
+
+ICT-Router(config)#interface Serial0/3/0
+ICT-Router(config-if)#ip add 10.10.10.6 255.255.255.252
+ICT-Router(config-if)#no shut
+ICT-Router(config-if)#ex
+
+DHCP for Voice
+--------------------------------------------------------------
+ICT-Router(config)#ip dhcp excluded-address 172.16.100.97
+
+ICT-Router(config)#ip dhcp pool ICTVOICE
+ICT-Router(dhcp-config)#network 172.16.100.96 255.255.255.224
+ICT-Router(dhcp-config)#default-router 172.16.100.97
+ICT-Router(dhcp-config)#option 150 ip 172.16.100.97
+ICT-Router(dhcp-config)#ex
+
+Inter-VLAN Routing
+--------------------------------------------------------------
+ICT-Router(config)#int fa0/0.40
+ICT-Router(config-subif)#encapsulation dot1Q 40
+ICT-Router(config-subif)#ip address 192.168.100.97 255.255.255.224
+ICT-Router(config-subif)#ip helper-address 192.168.100.130
+ICT-Router(config-subif)#ex
+
+ICT-Router(config)#int fa0/0.100
+ICT-Router(config-subif)#encapsulation dot1Q 100
+ICT-Router(config-subif)#ip address 172.16.100.97 255.255.255.224
+ICT-Router(config-subif)#ex
+
+ICT-Router(config)#int fa0/1.50
+ICT-Router(config-subif)#encapsulation dot1Q 50
+ICT-Router(config-subif)#ip address 192.168.100.129 255.255.255.248
+ICT-Router(config-subif)#ex
+
+OSPF Routing
+--------------------------------------------------------------
+ICT-Router(config)#router ospf 10
+ICT-Router(config-router)#router-id 4.4.4.4
+ICT-Router(config-router)#network 10.10.10.12 0.0.0.3 area 0
+ICT-Router(config-router)#network 10.10.10.4 0.0.0.3 area 0
+ICT-Router(config-router)#network 192.168.100.96 0.0.0.31 area 0
+ICT-Router(config-router)#network 172.16.100.96 0.0.0.31 area 0
+ICT-Router(config-router)#network 192.168.100.128 0.0.0.7 area 0
+ICT-Router(config-router)#ex
+
+VoIP Configuration
+--------------------------------------------------------------
+ICT-Router(config)#telephony-service
+ICT-Router(config-telephony)#max-dn 20
+ICT-Router(config-telephony)#max-ephones 20
+ICT-Router(config-telephony)#ip source-address 172.16.100.97 port 2000
+ICT-Router(config-telephony)#auto assign 1 to 20
+ICT-Router(config-telephony)#exit
+
+ICT-Router(config)#ephone-dn 1
+ICT-Router(config-ephone-dn)#number 401
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 2
+ICT-Router(config-ephone-dn)#number 402
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 3
+ICT-Router(config-ephone-dn)#number 403
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 4
+ICT-Router(config-ephone-dn)#number 404
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 5
+ICT-Router(config-ephone-dn)#number 405
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 6
+ICT-Router(config-ephone-dn)#number 406
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 7
+ICT-Router(config-ephone-dn)#number 407
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 8
+ICT-Router(config-ephone-dn)#number 408
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 9
+ICT-Router(config-ephone-dn)#number 409
+ICT-Router(config-ephone-dn)#exit
+
+ICT-Router(config)#ephone-dn 10
+ICT-Router(config-ephone-dn)#number 410
+ICT-Router(config-ephone-dn)#exit
+
+Dial peering configuration
+--------------------------------------------------------------
+ICT-Router(config)#dial-peer voice 2 voip 
+ICT-Router(config-dial-peer)#destination-pattern 1..
+ICT-Router(config-dial-peer)#session target ipv4:10.10.10.5
+ICT-Router(config-dial-peer)#ex
+
+ICT-Router(config)#dial-peer voice 5 voip 
+ICT-Router(config-dial-peer)#destination-pattern 3..
+ICT-Router(config-dial-peer)#session target ipv4:10.10.10.13
+ICT-Router(config-dial-peer)#ex
+
+ICT-Router(config)#dial-peer voice 6 voip 
+ICT-Router(config-dial-peer)#destination-pattern 2..
+ICT-Router(config-dial-peer)#session target ipv4:10.10.10.9
+ICT-Router(config-dial-peer)#ex
