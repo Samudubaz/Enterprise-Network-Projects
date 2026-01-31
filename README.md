@@ -10,6 +10,7 @@ A comprehensive collection of networking projects focusing on infrastructure des
 - [Hotel System Network Design](#-hotel-system-network-design)
 - [Campus/University System Network](#-campusuniversity-system-network)
 - [Secure Multi-Branch Enterprise Network](#-secure-multi-branch-enterprise-network)
+- [VoIP- IP Telephony System Design](#-voip--ip-telephony-system-design)
 
 ---
 
@@ -91,9 +92,23 @@ A comprehensive collection of networking projects focusing on infrastructure des
 
 ---
 
+### ◈ VoIP- IP Telephony System Design
+> **Focus:** Unified Communications & VoIP
+> *Integrating IP telephony services with advanced routing and dial-peer configurations for seamless voice communication.*
+
+[**[ Browse Files ]**](./6.Design%20and%20Implementation%20of%20a%20VoIP-%20IP%20Telephony%20System%20Network%20Design%20(Project%20%236)/)
+
+<details>
+<summary><b>Click to show Topology Preview</b></summary>
+
+![Network Topology](./6.Design%20and%20Implementation%20of%20a%20VoIP-%20IP%20Telephony%20System%20Network%20Design%20(Project%20%236)/Network%20Topology.png)
+</details>
+
+---
+
 ## 🛠️ Built With
 - **Simulator:** Cisco Packet Tracer
-- **Protocol/Tech:** Cisco IOS CLI, VLSM, Routing (OSPF/EIGRP/Static), VLANs, ACLs.
+- **Protocol/Tech:** Cisco IOS CLI, VLSM, Routing (OSPF/EIGRP/Static), VLANs, ACLs, VoIP, DHCP Helper.
 
 ---
 *Developed by Samudubaz*
